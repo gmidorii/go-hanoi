@@ -4,8 +4,8 @@ import (
 	"container/list"
 	"fmt"
 	"strconv"
+	"errors"
 )
-
 
 func main() {
 	left := list.New()
@@ -66,23 +66,22 @@ func printOneTower(l *list.List) {
 }
 
 func popPush(po, pu *list.List) {
-	n := pop(po)
-	if n == 0 {
-		return
+	n, ok := pop(po)
+	if ok != nil {
+		push(pu, n)
 	}
-	push(pu, n)
 }
 
-func pop(l *list.List) int {
+func pop(l *list.List) (int, error) {
 	if l.Len() == 0 {
-		return 0
+		return 0, errors.New("towers broken")
 	}
 	n := l.Remove(l.Back())
 	t, ok := n.(int)
 	if ok != false {
-		return t
+		return t, nil
 	}
-	return 0
+	return 0, errors.New("cannot convert int")
 }
 
 func push(l *list.List, n int) {
