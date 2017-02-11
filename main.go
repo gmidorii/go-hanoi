@@ -2,43 +2,49 @@ package main
 
 import (
 	"container/list"
+	"errors"
 	"fmt"
 	"strconv"
-	"errors"
 )
 
-func main() {
-	left := list.New()
-	center := list.New()
-	right := list.New()
+const left = 0
+const center = 1
+const right = 2
 
+var towers = []*list.List{
+	list.New(), // left tower
+	list.New(), // center tower
+	list.New(), // right tower
+}
+
+func main() {
 	fmt.Println("left -> right pool")
-	initTower(left, 3)
-	printTower(left, center, right)
+	initTower(towers[left], 3)
+	printTower(towers[left], towers[center], towers[right])
 	//// 2
 	//// 3 _ 1
-	popPush(left, right)
+	popPush(towers[left], towers[right])
 	////
 	//// 3 2 1
-	popPush(left, center)
+	popPush(towers[left], towers[center])
 	////   1
 	//// 3 2 _
-	popPush(right, center)
+	popPush(towers[right], towers[center])
 	////   1
 	//// _ 2 3
-	popPush(left, right)
+	popPush(towers[left], towers[right])
 	////
 	//// 1 2 3
-	popPush(center, left)
+	popPush(towers[center], towers[left])
 	////     2
 	//// 1 _ 3
-	popPush(center, right)
+	popPush(towers[center], towers[right])
 	////     1
 	////     2
 	//// _ _ 3
-	popPush(left, right)
+	popPush(towers[left], towers[right])
 
-	printTower(left, center, right)
+	printTower(towers[left], towers[center], towers[right])
 }
 
 func initTower(left *list.List, n int) {
@@ -66,8 +72,8 @@ func printOneTower(l *list.List) {
 }
 
 func popPush(po, pu *list.List) {
-	n, ok := pop(po)
-	if ok != nil {
+	n, err := pop(po)
+	if err == nil {
 		push(pu, n)
 	}
 }
