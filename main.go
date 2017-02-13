@@ -41,6 +41,28 @@ func main() {
 	towerCalc(towers, towers[left].Len())
 }
 
+func towerCalc2(towers []*list.List) {
+	if towers[center].Len() == 0 && towers[right].Len() == 0 {
+		if towers[left].Len()%2 == 0 {
+			move(towers[left], towers[center])
+		} else {
+			move(towers[left], towers[right])
+		}
+	}
+
+	if towers[center].Back().Value.(int) - towers[right].Back().Value.(int) == 1 {
+		move(towers[right], towers[center])
+	}
+	if towers[right].Back().Value.(int) - towers[center].Back().Value.(int) == 1 {
+		move(towers[center], towers[right])
+	}
+
+	if towers[center].Back().Value.(int) > towers[right].Back().Value.(int){
+		move(towers[right], towers[left])
+	}
+
+}
+
 func towerCalc(towers []*list.List, n int) {
 	if n == towers[right].Len() || count > 32 {
 		return
